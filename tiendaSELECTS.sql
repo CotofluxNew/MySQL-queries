@@ -59,16 +59,41 @@ WHERE fabricante.codigo = producto.codigo_fabricante
 
 13.-Llista el codi dels fabricants que tenen productes en la taula "producto", eliminant els codis que apareixen repetits.
 
-
+SELECT DISTINCT fabricante.nombre
+from producto, fabricante
 
 14.-Llista els noms dels fabricants ordenats de manera ascendent.
 
-
+SELECT DISTINCT fabricante.nombre
+from producto, fabricante
+ORDER BY fabricante.nombre ASC;
 
 15.-Llista els noms dels fabricants ordenats de manera descendent.
+
+SELECT DISTINCT fabricante.nombre
+from producto, fabricante
+ORDER BY fabricante.nombre DESC;
+
 16.-Llista els noms dels productes ordenats, en primer lloc, pel nom de manera ascendent i, en segon lloc, pel preu de manera descendent.
+
+SELECT producto.nombre
+from producto
+ORDER BY producto.nombre ASC;
+
+SELECT producto.nombre
+from producto
+ORDER BY producto.nombre DESC;
+
 17.-Retorna una llista amb les 5 primeres files de la taula "fabricante".
+
+SELECT *
+from fabricante
+LIMIT 5;
+
 18.-Retorna una llista amb 2 files a partir de la quarta fila de la taula "fabricante". La quarta fila també s'ha d'incloure en la resposta.
+
+
+
 19.-Llista el nom i el preu del producte més barat. (Utilitza solament les clàusules ORDER BY i LIMIT). NOTA: Aquí no podries usar MIN(preu), necessitaries GROUP BY
 20.-Llista el nom i el preu del producte més car. (Fes servir solament les clàusules ORDER BY i LIMIT). NOTA: Aquí no podries usar MAX(preu), necessitaries GROUP BY.
 21.-Llista el nom de tots els productes del fabricant el codi de fabricant del qual és igual a 2.
