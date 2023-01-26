@@ -126,13 +126,24 @@ WHERE persona.fecha_nacimiento BETWEEN '1999-01-01' AND '1999-12-31'
 
 18.- Calcula quants/es professors/es hi ha en cada departament. El resultat només ha de mostrar dues columnes, una amb el nom del departament i una altra amb el nombre de professors/es que hi ha en aquest departament. El resultat només ha d incloure els departaments que tenen professors/es associats i haurà d estar ordenat de major a menor pel nombre de professors/es.
 
+SELECT universidad.profesor.id_departamento, count(*) 
+FROM universidad.profesor
+GROUP BY universidad.profesor.id_departamento
 
 19.- Retorna un llistat amb tots els departaments i el nombre de professors/es que hi ha en cadascun d ells. Té en compte que poden existir departaments que no tenen professors/es associats/des. Aquests departaments també han d aparèixer en el llistat.
 
+SELECT * 
+FROM universidad.departamento, universidad.persona;
 
 20.- Retorna un llistat amb el nom de tots els graus existents en la base de dades i el nombre d assignatures que té cadascun. Té en compte que poden existir graus que no tenen assignatures associades. Aquests graus també han d aparèixer en el llistat. El resultat haurà d estar ordenat de major a menor pel nombre d assignatures.
 
+SELECT universidad.grado.nombre, universidad.asignatura.nombre
+FROM universidad.grado,universidad.asignatura
+WHERE universidad.grado.id = universidad.asignatura.id_grado
+order by universidad.asignatura.nombre DESC;
+
 21.- Retorna un llistat amb el nom de tots els graus existents en la base de dades i el nombre d assignatures que té cadascun, dels graus que tinguin més de 40 assignatures associades.
+
 
 22.- Retorna un llistat que mostri el nom dels graus i la suma del nombre total de crèdits que hi ha per a cada tipus d assignatura. El resultat ha de tenir tres columnes: nom del grau, tipus d assignatura i la suma dels crèdits de totes les assignatures que hi ha d aquest tipus.
 
