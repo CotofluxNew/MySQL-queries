@@ -144,6 +144,12 @@ order by universidad.asignatura.nombre DESC;
 
 21.- Retorna un llistat amb el nom de tots els graus existents en la base de dades i el nombre d assignatures que té cadascun, dels graus que tinguin més de 40 assignatures associades.
 
+SELECT  DISTINCT g.nombre, count(a.nombre)
+FROM grado g
+JOIN asignatura a
+WHERE a.id_grado = g.id
+group by g.nombre
+HAVING count(a.nombre)>40;
 
 22.- Retorna un llistat que mostri el nom dels graus i la suma del nombre total de crèdits que hi ha per a cada tipus d assignatura. El resultat ha de tenir tres columnes: nom del grau, tipus d assignatura i la suma dels crèdits de totes les assignatures que hi ha d aquest tipus.
 
@@ -157,3 +163,5 @@ SELECT * from persona WHERE persona.fecha_nacimiento  = (SELECT max(persona.fech
 from persona);
 
 26.- Retorna un llistat amb els professors/es que tenen un departament associat i que no imparteixen cap assignatura.
+
+
