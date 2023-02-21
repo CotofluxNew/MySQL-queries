@@ -126,8 +126,30 @@ ON p.codigo_fabricante = f.codigo
 ORDER BY f.nombre ASC;
 
 23.-Retorna una llista amb el codi del producte, nom del producte, codi del fabricant i nom del fabricant, de tots els productes de la base de dades.
+
+SELECT p.codigo, p.nombre, f.codigo, f.nombre
+FROM producto p
+JOIN fabricante f
+ON p.codigo_fabricante = f.codigo;
+
 24.-Retorna el nom del producte, el seu preu i el nom del seu fabricant, del producte més barat.
+
+SELECT p.nombre AS "producto", p.precio, f.nombre AS "fabricante"
+FROM producto p
+JOIN fabricante f
+ON p.codigo_fabricante = f.codigo
+ORDER BY p.precio ASC
+LIMIT 1;
+
 25.-Retorna el nom del producte, el seu preu i el nom del seu fabricant, del producte més car.
+
+SELECT p.nombre AS "producto", p.precio, f.nombre AS "fabricante"
+FROM producto p
+JOIN fabricante f
+ON p.codigo_fabricante = f.codigo
+ORDER BY p.precio DESC
+LIMIT 1;
+
 26.-Retorna una llista de tots els productes del fabricant Lenovo.
 27.-Retorna una llista de tots els productes del fabricant Crucial que tinguin un preu major que 200 €.
 28.-Retorna una llista amb tots els productes dels fabricants Asus, Hewlett-Packard i Seagate. Sense utilitzar l operador IN.

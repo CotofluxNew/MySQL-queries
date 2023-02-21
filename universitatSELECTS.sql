@@ -2,21 +2,21 @@
 
 SELECT persona.apellido1, persona.apellido2, persona.nombre 
 FROM persona
-ORDER BY persona.apellido1, persona.apellido2, persona.nombre DESC
+WHERE persona.tipo = "alumno"
+ORDER BY persona.apellido1, persona.apellido2, persona.nombre DESC;
 
 2.- Esbrina el nom i els dos cognoms dels/les alumnes que no han donat d alta el seu número de telèfon en la base de dades.
 
 SELECT  persona.nombre, persona.apellido1, persona.apellido2, persona.telefono
 FROM persona
-WHERE telefono IS NULL
+WHERE telefono IS NULL and persona.tipo = "alumno";
 
 
 3.- Retorna el llistat dels/les alumnes que van néixer en 1999.
 
 SELECT persona.apellido1, persona.apellido2, persona.nombre, persona.fecha_nacimiento
 FROM persona
-WHERE persona.fecha_nacimiento BETWEEN '1999-01-01' AND '1999-12-31';
-
+WHERE persona.fecha_nacimiento BETWEEN '1999-01-01' AND '1999-12-31' and persona.tipo ="alumno";
 
 4.- Retorna el llistat de professors/es que no han donat d alta el seu número de telèfon en la base de dades i a més el seu NIF acaba en K.
 
@@ -33,31 +33,50 @@ WHERE cuatrimestre = 1 and curso = 3 AND id_grado = 7;
 
 6.- Retorna un llistat dels professors/es juntament amb el nom del departament al qual estan vinculats/des. El llistat ha de retornar quatre columnes, primer cognom, segon cognom, nom i nom del departament. El resultat estarà ordenat alfabèticament de menor a major pels cognoms i el nom.
 
-SELECT persona.nombre, persona.apellido1, persona.apellido2, departamento.nombre
-FROM persona, departamento
-WHERE persona.tipo = 'profesor'
-ORDER BY persona.apellido1 DESC,  persona.apellido2 DESC, persona.nombre DESC;
+
+SELECT per.apellido1, per.apellido2, per.nombre, de.nombre AS Departamento
+FROM persona per
+JOIN profesor pro
+ON per.id = pro.id_profesor
+JOIN departamento de 
+ON pro.id_departamento = de.id
+WHERE per.tipo = 'profesor'
+ORDER BY per.apellido1, per.apellido2, per.nombre 
 
 7.- Retorna un llistat amb el nom de les assignatures, any d inici i any de fi del curs escolar de l alumne/a amb NIF 26902806M.
 
-SELECT persona.nombre, persona.apellido1, persona.apellido2, persona.nif, 
-curso_escolar.anyo_inicio, curso_escolar.anyo_fin, asignatura.nombre
-FROM asignatura, alumno_se_matricula_asignatura, persona, curso_escolar
-WHERE persona.nif ='26902806M'
+SELECT a.nombre, ce.anyo_inicio, ce.anyo_fin
+FROM persona p
+JOIN alumno_se_matricula_asignatura m
+ON m.id_alumno = p.id
+JOIN  asignatura a
+ON a.id = m.id_asignatura
+JOIN curso_escolar ce
+ON ce.id = m.id_curso_escolar
+WHERE p.nif = '26902806M'
 
 8.- Retorna un llistat amb el nom de tots els departaments que tenen professors/es que imparteixen alguna assignatura en el Grau en Enginyeria Informàtica (Pla 2015).
 
-SELECT grado.nombre, persona.tipo, departamento.nombre
-from grado, departamento, persona
-WHERE persona.tipo = 'profesor' and grado.nombre ='Grado en IngenierÃ­a InformÃ¡tica (Plan 2015)';
+SELECT d.nombre AS departamento_profe, a.nombre AS asignatura, p.id_profesor
+FROM profesor p
+JOIN asignatura a
+ON p.id_profesor = a.id_profesor
+JOIN departamento d
+ON d.id = p.id_departamento
+JOIN grado g
+ON g.id = a.id_grado
+WHERE g.id = 4;
 
 9.- Retorna un llistat amb tots els/les alumnes que s han matriculat en alguna assignatura durant el curs escolar 2018/2019.
 
-select *
-from curso_escolar, alumno_se_matricula_asignatura
-where curso_escolar.anyo_inicio = 2018 
-	and curso_escolar.anyo_fin = 2019 
-	and curso_escolar.id = alumno_se_matricula_asignatura.id_curso_escolar;
+SELECT distinct p.nombre, p.apellido1, p.apellido2
+FROM persona p
+JOIN alumno_se_matricula_asignatura asm
+ON p.id = asm.id_alumno
+JOIN curso_escolar ce
+ON asm.id_curso_escolar = ce.id
+WHERE p.tipo = "alumno" and ce.id = 5;
+
 
 Resol les 6 següents consultes utilitzant les clàusules LEFT JOIN i RIGHT JOIN.
 
