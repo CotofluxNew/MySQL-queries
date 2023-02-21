@@ -86,11 +86,45 @@ LIMIT 5;
 
 17.-Retorna una llista amb 2 files a partir de la quarta fila de la taula "fabricante". La quarta fila també s'ha d'incloure en la resposta.
 
+SELECT *
+FROM fabricante
+LIMIT 3, 2
+
 18.-Llista el nom i el preu del producte més barat. (Utilitza solament les clàusules ORDER BY i LIMIT). NOTA: Aquí no podries usar MIN(preu), necessitaries GROUP BY
+
+SELECT nombre, precio
+from producto
+order by precio ASC
+limit 1;
+
 19.-Llista el nom i el preu del producte més car. (Fes servir solament les clàusules ORDER BY i LIMIT). NOTA: Aquí no podries usar MAX(preu), necessitaries GROUP BY.
+
+SELECT nombre, precio
+from producto
+order by precio DESC
+limit 1;
+
 20.-Llista el nom de tots els productes del fabricant el codi de fabricant del qual és igual a 2.
+
+SELECT nombre
+FROM producto
+WHERE codigo_fabricante = 2
+
 21.-Retorna una llista amb el nom del producte, preu i nom de fabricant de tots els productes de la base de dades.
+
+SELECT p.nombre AS "producto", p.precio, f.nombre AS "fabricante"
+FROM producto p
+JOIN fabricante f
+ON p.codigo_fabricante = f.codigo;
+
 22.- Retorna una llista amb el nom del producte, preu i nom de fabricant de tots els productes de la base de dades. Ordena el resultat pel nom del fabricant, per ordre alfabètic.
+
+SELECT p.nombre AS "producto", p.precio, f.nombre AS "fabricante"
+FROM producto p
+JOIN fabricante f
+ON p.codigo_fabricante = f.codigo
+ORDER BY f.nombre ASC;
+
 23.-Retorna una llista amb el codi del producte, nom del producte, codi del fabricant i nom del fabricant, de tots els productes de la base de dades.
 24.-Retorna el nom del producte, el seu preu i el nom del seu fabricant, del producte més barat.
 25.-Retorna el nom del producte, el seu preu i el nom del seu fabricant, del producte més car.
