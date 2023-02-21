@@ -91,20 +91,21 @@ ORDER BY persona.apellido1 DESC, persona.apellido2 DESC, persona.nombre DESC;
 
 11.- Retorna un llistat amb els professors/es que no estan associats a un departament.
 
-SELECT persona.nombre, persona.apellido1, persona.apellido2, departamento.nombre
-  FROM persona
-  LEFT JOIN departamento
-    ON persona.id = departamento.id
-WHERE persona.tipo = 'profesor' and departamento.nombre IS NULL
-ORDER BY persona.apellido1 DESC, persona.apellido2 DESC, persona.nombre DESC;
+SELECT p.nombre, p.apellido1, p.apellido2
+FROM persona p
+LEFT JOIN profesor pf
+ON pf.id_profesor = p.id
+LEFT JOIN asignatura a
+ON a.id_profesor = pf.id_profesor
+WHERE (p.tipo = 'profesor') AND (a.id_profesor IS NULL);
 
 12.- Retorna un llistat amb els departaments que no tenen professors/es associats.
 
-SELECT persona.nombre, persona.apellido1, persona.apellido2, departamento.nombre
-  FROM departamento
- RIGht JOIN PERSONA
-    ON persona.id = departamento.id
-WHERE persona.nombre is null and persona.apellido1 is null and persona.apellido2 is null
+SELECT d.nombre
+FROM departamento d
+LEFT JOIN profesor pf
+ON pf.id_departamento = d.id
+WHERE pf.id_departamento IS NULL
 
 13.- Retorna un llistat amb els professors/es que no imparteixen cap assignatura.
 
@@ -124,11 +125,15 @@ WHERE asignatura.id_profesor is null
 
 15.- Retorna un llistat amb tots els departaments que no han impartit assignatures en cap curs escolar.
 
-SELECT *
-  FROM asignatura
- RIGht JOIN departamento 
-    ON departamento.id = asignatura.id_grado 
-Where asignatura.nombre is null
+SELECT d.nombre AS departamento, a.nombre AS asignatura, m.id_curso_escolar
+FROM departamento d
+LEFT JOIN profesor p
+ON p.id_departamento = d.id
+LEFT JOIN asignatura a 
+ON a.id_profesor = p.id_profesor
+LEFT JOIN alumno_se_matricula_asignatura m
+ON m.id_asignatura = a.id
+WHERE a.nombre IS NULL OR m.id_curso_escolar IS NULL
 
 Consultes resum:
 
@@ -145,21 +150,34 @@ WHERE persona.fecha_nacimiento BETWEEN '1999-01-01' AND '1999-12-31'
 
 18.- Calcula quants/es professors/es hi ha en cada departament. El resultat només ha de mostrar dues columnes, una amb el nom del departament i una altra amb el nombre de professors/es que hi ha en aquest departament. El resultat només ha d incloure els departaments que tenen professors/es associats i haurà d estar ordenat de major a menor pel nombre de professors/es.
 
-SELECT universidad.profesor.id_departamento, count(*) 
-FROM universidad.profesor
-GROUP BY universidad.profesor.id_departamento
+SELECT d.nombre AS departamento, COUNT(p.id) AS profesores
+FROM persona p
+JOIN profesor pf
+ON p.id = pf.id_profesor
+JOIN departamento d
+ON d.id = pf.id_departamento
+WHERE p.tipo = 'profesor' 
+GROUP BY d.nombre
+ORDER BY profesores DESC
 
 19.- Retorna un llistat amb tots els departaments i el nombre de professors/es que hi ha en cadascun d ells. Té en compte que poden existir departaments que no tenen professors/es associats/des. Aquests departaments també han d aparèixer en el llistat.
 
-SELECT * 
-FROM universidad.departamento, universidad.persona;
+SELECT d.nombre AS departamento, COUNT(pf.id_profesor) AS profesores
+FROM departamento d
+LEFT JOIN profesor pf
+ON pf.id_departamento = d.id
+WHERE (pf.id_profesor = @pf.id_profesor OR @pf.id_profesor IS NULL)
+GROUP BY d.nombre
 
 20.- Retorna un llistat amb el nom de tots els graus existents en la base de dades i el nombre d assignatures que té cadascun. Té en compte que poden existir graus que no tenen assignatures associades. Aquests graus també han d aparèixer en el llistat. El resultat haurà d estar ordenat de major a menor pel nombre d assignatures.
 
-SELECT universidad.grado.nombre, universidad.asignatura.nombre
-FROM universidad.grado,universidad.asignatura
-WHERE universidad.grado.id = universidad.asignatura.id_grado
-order by universidad.asignatura.nombre DESC;
+SELECT g.nombre AS grado, COUNT(a.id) AS asignaturas 
+FROM grado g
+LEFT JOIN asignatura a
+ON a.id_grado = g.id
+WHERE (g.id = @g.id OR @g.id IS NULL)
+GROUP BY g.nombre
+ORDER BY asignaturas DESC
 
 21.- Retorna un llistat amb el nom de tots els graus existents en la base de dades i el nombre d assignatures que té cadascun, dels graus que tinguin més de 40 assignatures associades.
 
