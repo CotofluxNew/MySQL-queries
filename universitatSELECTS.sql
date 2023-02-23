@@ -272,10 +272,30 @@ FROM alumno_se_matricula_asignatura a
 LEFT JOIN curso_escolar c ON c.id = a.id_curso_escolar
 GROUP BY c.anyo_inicio;
 
-9.- Retorna un llistat amb el nombre d'assignatures que imparteix cada professor/a. El llistat ha de tenir en compte aquells professors/es que no imparteixen cap assignatura. El resultat mostrarà cinc columnes: id, nom, primer cognom, segon cognom i nombre d'assignatures. El resultat estarà ordenat de major a menor pel nombre d'assignatures.
+9.- Retorna un llistat amb el nombre d assignatures que imparteix cada professor/a. El llistat ha de tenir en compte aquells professors/es que no imparteixen cap assignatura. El resultat mostrarà cinc columnes: id, nom, primer cognom, segon cognom i nombre d assignatures. El resultat estarà ordenat de major a menor pel nombre d assignatures.
 
+SELECT p.id AS id_prof, p.nombre, p.apellido1, p.apellido2, COUNT(a.id) AS asignaturas
+FROM persona p
+LEFT JOIN asignatura a
+ON a.id_profesor = p.id
+WHERE (p.tipo = 'profesor') AND (a.id = @a.id OR @a.id IS NULL)
+GROUP BY p.id
+ORDER BY asignaturas DESC
 
+10.-Retorna totes les dades de l alumne més jove.
 
-10.-Retorna totes les dades de l'alumne més jove.
+SELECT p.*
+FROM persona p
+WHERE p.tipo = "alumno"
+ORDER BY fecha_nacimiento DESC LIMIT 1
+
 11.-Retorna un llistat amb els professors/es que tenen un departament associat i que no imparteixen cap assignatura.
+
+SELECT p.nombre AS nombre_prof, p.apellido1, p.apellido2, pf.id_departamento, a.id AS asignatura
+FROM persona p
+LEFT JOIN profesor pf
+ON pf.id_profesor = p.id
+LEFT JOIN asignatura a
+ON a.id_profesor = pf.id_profesor
+WHERE (p.tipo = 'profesor') AND (a.id IS NULL)
 
